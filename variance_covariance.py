@@ -197,9 +197,9 @@ def main():
     article=list_lists(df_train['filing'])
     w2v_train = glove(article)
     w2v=MeanEmbeddingVectorizer(w2v_train).fit(article)
-    X_train = get_covariance_vector(article,w2v,6484)
+    X_train = get_covariance_vector(article,w2v,len(article))
     test_article = list_lists(df_test['filing'])
-    X_test = get_covariance_vector(test_article,w2v,1390)
+    X_test = get_covariance_vector(test_article,w2v,len(test_article))
     y_train = df_train['label']
     y_test = df_test['label']
     
@@ -210,7 +210,7 @@ def main():
     val_article = list_lists(df_val['filing'])
     w2v_train = glove(val_article)
     w2v=MeanEmbeddingVectorizer(w2v_train).fit(val_article)
-    X_val = get_covariance_vector(val_article,w2v,1387)
+    X_val = get_covariance_vector(val_article,w2v,len(val_article))
     y_score = m.predict(X_val)
     y_score = (y_score > 0.60)
     
@@ -222,54 +222,3 @@ def main():
     report_validation = classification_report(df_val['label'],y_score)
     
 main()
-
-#from sklearn.metrics import roc_curve, auc
-#from sklearn.metrics import precision_recall_curve
-#import matplotlib.pyplot as plt 
-#import pandas as pd
-
-#from sklearn.metrics import confusion_matrix
-##from sklw
-#for 
-#y_score = m.predict(final_val)
-#y_val=y_test
-#y_val=np.array(y_val)
-#
-#precision, recall, thresholds = precision_recall_curve(y_val, y_score[:, 
-#0]) 
-#   #retrieve probability of being 1(in second column of probs_y)
-#pr_auc = metrics.auc(recall, precision)
-#
-#plt.title("Precision-Recall vs Threshold Chart")
-#plt.plot(thresholds, precision[: -1], "b--", label="Precision")
-#plt.plot(thresholds, recall[: -1], "r--", label="Recall")
-#plt.ylabel("Precision, Recall")
-#plt.xlabel("Threshold")
-#plt.legend(loc="lower left")
-#plt.ylim([0,1])
-#
-#import pandas as pd
-#from keras.models import load_model
-#from sklearn.metrics import confusion_matrix
-#df_val = pd.read_csv('test.csv')
-#
-#val_article = list_lists(df_val['filing'])
-#w2v_train = glove(val_article)
-#
-#w2v=MeanEmbeddingVectorizer(w2v_train).fit(val_article)
-#
-#final_val=[]
-#for i in val_article:
-#    k = w2v.transform([i])
-#    k = k.reshape(k.shape[1],100)
-#    k = k.transpose()
-#    k1 = np.cov(k)
-#    k1 = k1.astype(np.float16, copy=False)
-#    k2 = k1[np.triu_indices(100)]
-#    final_val.append(k2)
-#final_val=np.array(final_val,dtype='float16')
-##file=open('confusion_coveriance.txt','w')
-#final_val=final_val.reshape(1224,5050,1)
-#
-#y_score = (y_score > 0.45)
-#cm = confusion_matrix(df_val['target'], y_score)
